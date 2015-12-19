@@ -139,7 +139,7 @@
 (prime? 1) ; -> #f
 (prime? 0) ; -> #f
 (prime? 200) ; -> #f
-(prime? 199) ; -> #f
+(prime? 199) ; -> #t
 
 ;; PROBLEM 5: Random primes
 ;; ========================
