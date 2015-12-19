@@ -159,3 +159,39 @@
 
 ;; PROBLEM 6: Multiplicative Inverses
 ;; ==================================
+
+(define (ax+by=1 a b)
+  (let ((q (quotient a b))
+        (r (remainder a b)))
+    (if (= r 1)
+      (list 1 (- q))
+      (let*
+        ((deriv (ax+by=1 b r))
+         (x2 (first deriv))
+         (y2 (second deriv)))
+        (list y2 (- x2 (* q y2)))))))
+
+(ax+by=1 17 13) ; -> (-3 4)   17*-3 + 13*4 = 1
+(ax+by=1 7 3)   ; -> (1 -2)    7*1  + 3*-2 = 1
+(ax+by=1 10 27) ; -> (-8 3)   10*-8 + 3*27 = 1
+
+(define (inversemod n)
+  (lambda (e)
+    (if (= (gcd e n) 1)
+      (modulo (first (ax+by=1 e n)) n)
+      (error "e and n are not co-prime"))))
+
+((inversemod 11) 5) ; -> 9       5*9 = 45 = 1 (mod 11)
+((inversemod 11) 9) ; -> 5
+((inversemod 11) 7) ; -> 8       7*8 = 56 = 1 (mod 11)
+((inversemod 12) 5) ; -> 5       5*5 = 25 = 1 (mod 12)
+;((inversemod 12) 8) ; -> error   gcd(8,12)=4, so no inverse exists
+
+(let*
+  ((rnd-prime (random-k-digit-prime 8))
+   (im ((inversemod 101) rnd-prime)))
+  (*mod im rnd-prime 101)) ; -> 1
+
+;; PROBLEM 7: The ElGamal Public-Key Cryptosystem
+;; ==============================================
+       
